@@ -1,5 +1,5 @@
 <?php 
-    //Incluir funciones
+    //Incluir funciones nirnfinrf riunfiur
     require 'includes/funciones.php';
 
     //Leer el archivo JSON completo
