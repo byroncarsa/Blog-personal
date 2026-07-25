@@ -1,4 +1,7 @@
 <?php
+//Constantes
+define('TEMPLATES_URL', __DIR__ . '/../templates');
+
 //Debuguear
 function debuguear($variable){
     echo "<pre>";
@@ -19,4 +22,9 @@ function fecha($fechaJson){
     $fecha = $fecha->format('F j, Y');
 
     return $fecha;
+}
+
+//Agregar template
+function incluirTemplate( string  $nombre) {
+    include TEMPLATES_URL . "/{$nombre}.php"; 
 }

@@ -2,6 +2,9 @@
     //Incluir funciones
     require 'includes/funciones.php';
 
+    //Incluir header
+    incluirTemplate('header');
+
     //Leer el archivo JSON completo
     $jsonString = file_get_contents('json/articulos.json');
     
@@ -69,17 +72,6 @@
     }
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Blog</title>
-
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
-
 <main class="container">
     <div class="titulo">
         <h1>New Article</h1>
@@ -104,5 +96,7 @@
     </form>
 </main>
 
-</body>
-</html>
+<?php 
+    //Incluir footer
+    incluirTemplate('footer');
+?>

@@ -2,6 +2,7 @@
 /* GLOBALES */
 .container{
     width: 500px;
+    min-height: 500px;
     margin: 0 auto;
     border: solid 2px black;
     padding: 20px 30px;

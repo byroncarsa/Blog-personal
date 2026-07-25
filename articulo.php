@@ -3,6 +3,9 @@
     //Incluir funciones
     require 'includes/funciones.php';
 
+    //Incluir header
+    incluirTemplate('header');
+
     //Obtener id de index
     $id = $_GET['id'];
     $id = filter_var($id);
@@ -28,17 +31,6 @@
 
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Blog</title>
-
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
-
 <main class="container">
 
     <div class="titulo">
@@ -51,5 +43,7 @@
     <p class="contenido"><?php echo $articulo['contenido']; ?></p>
 </main>
 
-</body>
-</html>
+<?php 
+    //Incluir footer
+    incluirTemplate('footer');
+?>

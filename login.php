@@ -1,6 +1,5 @@
 <?php 
-    //Incluir funciones
-    require 'includes/funciones.php';
+   
 
     //Arreglo errores
     $errores = [];
@@ -13,8 +12,8 @@
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
         //Completar variables 
-        $usuario = s($_POST['usuario']);
-        $password = s($_POST['password']);
+        $usuario = $_POST['usuario'];
+        $password = $_POST['password'];
 
         $user = 'admin';
         $pass = '12345';
@@ -40,18 +39,13 @@
         }
     }
 
+    //Incluir funciones
+    require 'includes/funciones.php';
+
+    //Incluir header
+    incluirTemplate('header');
+
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Blog</title>
-
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
 
 <main class="container">
     <div class="titulo">
@@ -79,5 +73,7 @@
 
 </main>
 
-</body>
-</html>
+<?php 
+    //Incluir footer
+    incluirTemplate('footer');
+?>

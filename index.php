@@ -2,22 +2,19 @@
     //Incluir funciones
     require 'includes/funciones.php';
 
+    //Incluir funciones
+    require 'includes/database.php';
+    $db = conectarDB();
+
     //Leer el archivo JSON completo
     $jsonString = file_get_contents('json/articulos.json');
     
     //Convertir el texto JSON a un arreglo asociativo de PHP
     $articulos = json_decode($jsonString, true);
+
+    //Incluir header
+    incluirTemplate('header');
 ?>
-
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Personal Blog</title>
-
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
 
 <main class="container">
     <div class="titulo">
@@ -38,5 +35,7 @@
     </div>
 </main>
 
-</body>
-</html>
+<?php 
+    //Incluir footer
+    incluirTemplate('footer');
+?>
