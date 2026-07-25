@@ -1,0 +1,129 @@
+
+/* GLOBALES */
+.container{
+    width: 500px;
+    margin: 0 auto;
+    border: solid 2px black;
+    padding: 20px 30px;
+}
+
+h1, p{
+    margin: 0;
+}
+
+p, a{
+    font-size: 18px;
+    font-weight: 600;
+}
+
+a{
+    text-decoration: none;
+    color: black;
+}
+
+.c-gray{
+    color: gray;
+}
+
+
+/* MENSAJES */
+.alerta{
+    color: white;
+    padding: 5px;
+    margin-top: 5px;
+}
+
+.exito{
+    background-color: green;
+}
+
+.error{
+    background-color: red;
+}
+
+
+/* FORMULARIO */
+.formulario {
+    margin-top: 15px;
+}
+
+.entradas {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.formulario input {
+    border: solid 2px black;
+    padding: 10px 10px;
+    font-weight: 700;
+}
+
+.formulario textarea {
+    border: solid 2px black;
+    padding: 10px 10px;
+    font-weight: 700;
+    height: 200px;
+}
+
+.formulario .boton {
+    border: solid 2px black;
+    padding: 10px 30px;
+    font-weight: 700;
+    margin-top: 13px;
+}
+
+
+/* INDEX */
+.articulos{
+    margin-top: 10px;
+}
+
+.articulo{
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0px;
+}
+
+
+/* ARTICULOS */
+.contenido{
+    margin-top: 15px;
+}
+
+.fecha{
+    margin-top: 10px;
+}
+
+.botones{
+    display: flex;
+    gap: 18px;
+}
+
+
+/* ADMIN */
+.titulo{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+span{
+    margin-right: 5px;
+}
+
+.sesion{
+    display: flex;
+    flex-direction: column;
+}
+
+.delete{
+    border: none;
+    background-color: white;
+    color: gray;
+    font-size: 18px;
+    padding: 0;
+    font-weight: 700;
+    font-family: 'Times New Roman', Times, serif;
+}
