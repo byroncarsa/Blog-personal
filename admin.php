@@ -2,6 +2,7 @@
     //Incluir funciones nirnfinrf riunfiur
     require 'includes/funciones.php';
     require 'includes/funciones.php';
+    require 'includes/funciones.php';
 
     //Leer el archivo JSON completo
     $jsonString = file_get_contents('json/articulos.json');
