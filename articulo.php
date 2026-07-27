@@ -1,10 +1,6 @@
 <?php
-
-    //Incluir funciones
-    require 'includes/funciones.php';
-
-    //Incluir header
-    incluirTemplate('header');
+    //Incluir app
+    require 'includes/app.php';
 
     //Obtener id de index
     $id = $_GET['id'];
@@ -14,21 +10,25 @@
     if(!$id) {
         header('Location: /');
     }
-
-    //Leer el archivo JSON completo
-    $jsonString = file_get_contents('json/articulos.json');
     
-    //Convertir el texto JSON a un arreglo asociativo de PHP
-    $articulos = json_decode($jsonString, true);
+    //Conexion bd
+    $db = conectarDB();
 
-    //Listar todo
-    foreach($articulos as $tmp){
-        if($tmp['id'] == $id){
-            $articulo = $tmp;
-            break;
-        }
-    }
+    // Escribir el Query
+    $query = "SELECT * FROM articulo WHERE id = {$id}";
 
+    // Consultar la BD 
+    $resultado = mysqli_query($db, $query);
+
+    if(!$resultado->num_rows) {
+        header('Location: /');
+    } 
+    
+    // Consultar la BD 
+    $articulo = mysqli_fetch_assoc($resultado);
+
+    //Incluir header
+    incluirTemplate('header');
 ?>
 
 <main class="container">

@@ -39,8 +39,8 @@
         }
     }
 
-    //Incluir funciones
-    require 'includes/funciones.php';
+     //Incluir app
+    require 'includes/app.php';
 
     //Incluir header
     incluirTemplate('header');

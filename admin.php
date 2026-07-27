@@ -1,15 +1,16 @@
 <?php 
-    //Incluir funciones nirnfinrf riunfiur
-    require 'includes/funciones.php';
+     //Incluir app
+    require 'includes/app.php';
     
-    //Incluir header
-    incluirTemplate('header');
+    //Conexion bd
+    $db = conectarDB();
 
-    //Leer el archivo JSON completo
-    $jsonString = file_get_contents('json/articulos.json');
-    
-    //Convertir el texto JSON a un arreglo asociativo de PHP
-    $articulos = json_decode($jsonString, true);
+    // Escribir el Query
+    $query = "SELECT * FROM articulo";
+
+    // Consultar la BD 
+    $articulos = mysqli_query($db, $query);
+
 
     // Muestra mensaje condicional
     $resultado = $_GET['resultado'] ?? null;
@@ -36,6 +37,9 @@
             header("Location: admin.php?resultado=3");
         }
     }
+
+    //Incluir header
+    incluirTemplate('header');
 
 ?>
 

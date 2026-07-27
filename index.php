@@ -1,16 +1,15 @@
 <?php 
-    //Incluir funciones
-    require 'includes/funciones.php';
+    //Incluir app
+    require 'includes/app.php';
 
-    //Incluir funciones
-    require 'includes/database.php';
+    //Conexion bd
     $db = conectarDB();
 
-    //Leer el archivo JSON completo
-    $jsonString = file_get_contents('json/articulos.json');
-    
-    //Convertir el texto JSON a un arreglo asociativo de PHP
-    $articulos = json_decode($jsonString, true);
+    // Escribir el Query
+    $query = "SELECT * FROM articulo";
+
+    // Consultar la BD 
+    $articulos = mysqli_query($db, $query);
 
     //Incluir header
     incluirTemplate('header');
