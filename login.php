@@ -1,25 +1,21 @@
 <?php 
-   
+
+    //Incluir app
+    require 'includes/app.php';
+
+    $db = conectarDB();
 
     //Arreglo errores
     $errores = [];
 
-    //Inicializar variables
-    $usuario = 'admin';
-    $password = '12345';
-
-
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
         //Completar variables 
-        $usuario = $_POST['usuario'];
-        $password = $_POST['password'];
+        $nombre = mysqli_real_escape_string($db,  $_POST['nombre'] );
+        $password = mysqli_real_escape_string($db,  $_POST['password']);
 
-        $user = 'admin';
-        $pass = '12345';
-
-        if(!$usuario){
-            $errores[] = 'Debes añadir un usaurio';
+        if(!$nombre){
+            $errores[] = 'Debes añadir un nombre de usuario';
         }
 
         if(!$password){
@@ -29,22 +25,37 @@
         //Verificar que no haya errores
         if(empty($errores)){
 
-            if($usuario === $user && $password === $pass){
+            // Revisar si el usuario existe.
+            $query = "SELECT * FROM usuario WHERE nombre = '{$nombre}' ";
+            $resultado = mysqli_query($db, $query);
 
-                header('Location: /admin.php');
+            if( $resultado->num_rows ) {
+                 // Revisar si el password es correcto
+                $usuario = mysqli_fetch_assoc($resultado);
 
-            }else{
-                $errores[] = 'El usuario y/o password es incorrecto';
+                // Verificar si el password es correcto o no
+                $auth = password_verify($password, $usuario['password']);
+
+                if($auth) {
+                    // El usuario esta autenticado
+                    session_start();
+
+                    // Llenar el arreglo de la sesión
+                    $_SESSION['usuario'] = $usuario['nombre'];
+                    $_SESSION['login'] = true;
+     
+                    header('Location: /admin.php');
+                }else {
+                    $errores[] = 'El password es incorrecto';
+                }
+            }else {
+                $errores[] = "El Usuario no existe";
             }
         }
     }
 
-     //Incluir app
-    require 'includes/app.php';
-
     //Incluir header
     incluirTemplate('header');
-
 ?>
 
 <main class="container">
@@ -62,8 +73,8 @@
         <?php endforeach ?>
 
         <div class="entradas">
-            <input type="text" placeholder="User Name" name="usuario" value="<?php echo $usuario ?>">
-            <input type="password" placeholder="Password" name="password" value="<?php echo $password ?>">
+            <input type="text" placeholder="User Name" name="nombre">
+            <input type="password" placeholder="Password" name="password">
         </div>
 
         <input type="submit" value="Enter" class="boton">

@@ -28,3 +28,14 @@ function fecha($fechaJson){
 function incluirTemplate( string  $nombre) {
     include TEMPLATES_URL . "/{$nombre}.php"; 
 }
+
+//Esta autenticado
+function estaAutenticado() : bool {
+    session_start();
+
+    $auth = $_SESSION['login'];
+    if($auth) {
+        return true;
+    }
+    return false;
+}

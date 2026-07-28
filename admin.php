@@ -1,7 +1,14 @@
 <?php 
-     //Incluir app
+
+    //Incluir app
     require 'includes/app.php';
-    
+
+    $auth = estaAutenticado();
+
+    if(!$auth) {
+        header('Location: /');
+    }
+
     //Conexion bd
     $db = conectarDB();
 
@@ -10,8 +17,7 @@
 
     // Consultar la BD 
     $articulos = mysqli_query($db, $query);
-
-
+    
     // Muestra mensaje condicional
     $resultado = $_GET['resultado'] ?? null;
 
@@ -20,27 +26,19 @@
         $id = filter_var($id, FILTER_VALIDATE_INT);
 
         if($id) {
+            // Eliminar la propiedad
+            $query = "DELETE FROM articulo WHERE id = {$id}";
 
-            // Filtrar el array para EXCLUIR el articulo con el id recibido
-            $articulosFiltrados = array_filter($articulos, function($articulo) use ($id) {
-                return $articulo['id'] !== $id;
-            });
-            
-            // Reindexar el array (array_filter conserva las llaves originales, esto las limpia)
-            $articulosFinales = array_values($articulosFiltrados);
-            
-            // Guardar el nuevo array en el archivo JSON
-            $jsonFinal = json_encode($articulosFinales, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-            file_put_contents('json/articulos.json', $jsonFinal);
-            
-            // Redireccionar de vuelta a la lista de usuarios
-            header("Location: admin.php?resultado=3");
+            $resultado = mysqli_query($db, $query);
+
+            if($resultado) {
+                header('location: /admin.php?resultado=3');
+            }
         }
     }
 
     //Incluir header
     incluirTemplate('header');
-
 ?>
 
 <main class="container">
@@ -49,7 +47,7 @@
         <h1>Personal blog</h1>
         <div class="sesion">
             <a href="new.php"><span>+</span>Add</a>
-            <a href="index.php">Logout</a>
+            <a href="logout.php">Logout</a>
         </div>
     </div>
 

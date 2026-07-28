@@ -2,14 +2,13 @@
    //Incluir app
     require 'includes/app.php';
 
-    //Incluir header
-    incluirTemplate('header');
+    $auth = estaAutenticado();
 
-    //Leer el archivo JSON completo
-    $jsonString = file_get_contents('json/articulos.json');
-    
-    //Convertir el texto JSON a un arreglo asociativo de PHP
-    $articulos = json_decode($jsonString, true);
+    if(!$auth) {
+        header('Location: /');
+    }
+
+    $db = conectarDB();
 
     //Arreglo errores
     $errores = [];
@@ -22,6 +21,7 @@
 
         //Completar variables 
         $titulo = $_POST['titulo'];
+        $fecha = date('Y-m-d');
         $contenido = $_POST['contenido'];
 
         if(!$titulo){
@@ -32,44 +32,21 @@
             $errores[] = 'Debes añadir un mensaje';
         }
 
-        //Verificar que no haya errores
-        if(empty($errores)){
+        if(empty($errores)) {
+              // Insertar en la base de datos
+            $query = " INSERT INTO articulo (titulo, fecha, contenido ) VALUES ( '$titulo', '$fecha', '$contenido' ) ";
+                
+            $resultado = mysqli_query($db, $query);
 
-            //Si el archivo estaba vacío, inicializamos un array limpio
-            if (!is_array($articulos)) {
-                $articulos = [];
+            if($resultado) {
+                // Redireccionar al usuario.
+                header('Location: /admin.php?resultado=1');
             }
-            
-            //Encontrar el ID más alto
-            $idMaximo = 0;
-            foreach ($articulos as $item) {
-                if (isset($item['id']) && $item['id'] > $idMaximo) {
-                    $idMaximo = $item['id'];
-                }
-            }
-
-            //Crear el nuevo elemento que queremos agregar
-            $nuevo_elemento = [
-                "id" => $idMaximo + 1,
-                "titulo" => $titulo,
-                "fecha" => date('Y-m-d'),
-                "contenido" => $contenido
-            ];
-
-            //Añadir el nuevo elemento al final del array
-            $articulos[] = $nuevo_elemento;
-            
-            //Convertir el array actualizado de vuelta a texto JSON
-            // JSON_PRETTY_PRINT sirve para que el archivo quede ordenado y legible
-            $json_actualizado = json_encode($articulos, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-            
-            //Guardar el nuevo contenido en el archivo
-            file_put_contents('json/articulos.json', $json_actualizado);
-
-            // Redireccionar al usuario.
-            header('Location: /admin.php?resultado=1');
         }
     }
+
+    //Incluir header
+    incluirTemplate('header');
 ?>
 
 <main class="container">

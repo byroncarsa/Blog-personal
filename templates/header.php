@@ -1,3 +1,12 @@
+<?php 
+
+    if(!isset($_SESSION)) {
+        session_start();
+    }
+
+    $auth = $_SESSION['login'] ?? false;
+?>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">

@@ -3,32 +3,26 @@
     //Incluir app
     require 'includes/app.php';
 
-    //Incluir header
-    incluirTemplate('header');
+    $auth = estaAutenticado();
+
+    if(!$auth) {
+        header('Location: /');
+    }
 
     //Recibir id
     $id = $_GET['id'];
-
     $id = filter_var($id);
 
-    //Si no hay id enviar al index
     if(!$id) {
-        header('Location: admin.php');
+        header('Location: /admin');
     }
 
-    //Leer el archivo JSON completo
-    $jsonString = file_get_contents('json/articulos.json');
-    
-    //Convertir el texto JSON a un arreglo asociativo de PHP
-    $articulos = json_decode($jsonString, true);
+    $db = conectarDB();
 
-    //Listar todo
-    foreach($articulos as $tmp){
-        if($tmp['id'] == $id){
-            $articulo = $tmp;
-            break;
-        }
-    }
+    // Obtener los datos de la propiedad
+    $consulta = "SELECT * FROM articulo WHERE id = {$id}";
+    $resultado = mysqli_query($db, $consulta);
+    $articulo = mysqli_fetch_assoc($resultado);
 
     //Errores
     $errores = [];
@@ -37,16 +31,12 @@
     $titulo = $articulo['titulo'];
     $contenido = $articulo['contenido'];
 
-    // Arreglo con mensajes de errores
-    $errores = [];
-
 
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
-        $encontrado = false;
-
-        $titulo = $_POST['titulo'];
-        $contenido = $_POST['contenido'];
+        $titulo = mysqli_real_escape_string( $db,  $_POST['titulo'] );
+        $fecha = date('Y-m-d');
+        $contenido = mysqli_real_escape_string( $db,  $_POST['contenido'] );
 
         if(!$titulo){
             $errores[] = 'Debe agregar un titulo';
@@ -58,27 +48,20 @@
 
 
         if(empty($errores)) {
-            //Modificar el elemento
-            foreach($articulos as &$datos){
-                if($datos['id'] == $id){
-                    $datos['titulo'] = $titulo;
-                    $datos['fecha'] = date('Y-m-d');
-                    $datos['contenido'] = $contenido;
-                    $encontrado = true;
-                    break;
-                }
-            }
+            // Insertar en la base de datos
+            $query = " UPDATE articulo SET titulo = '{$titulo}', fecha = '{$fecha}', contenido = '{$contenido}' WHERE id = {$id} ";
 
-            //Guardar los cambios
-            if($encontrado){
-                $jsonFinal = json_encode($articulos, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
-                file_put_contents("json/articulos.json", $jsonFinal);
+            $resultado = mysqli_query($db, $query);
+
+            if($resultado) {
                 // Redireccionar al usuario.
                 header('Location: /admin.php?resultado=2');
             }
         }
     }
 
+    //Incluir header
+    incluirTemplate('header');
 ?>
 
 <main class="container">
