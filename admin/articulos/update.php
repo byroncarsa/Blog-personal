@@ -1,6 +1,6 @@
 <?php
     //Incluir 
-    require '../../includes/funciones.php';
+    require '../../includes/app.php';
     $auth = estaAutenticado();
 
     if(!$auth) {
@@ -15,7 +15,6 @@
         header('Location: /admin');
     }
 
-    require '../../includes/config/database.php';
     $db = conectarDB();
 
     // Obtener los datos de la propiedad
