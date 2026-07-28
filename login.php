@@ -29,7 +29,7 @@
             $resultado = mysqli_query($db, $query);
 
             if( $resultado->num_rows ) {
-                 // Revisar si el password es correcto
+                    // Revisar si el password es correcto
                 $usuario = mysqli_fetch_assoc($resultado);
 
                 // Verificar si el password es correcto o no
@@ -42,7 +42,7 @@
                     // Llenar el arreglo de la sesión
                     $_SESSION['usuario'] = $usuario['nombre'];
                     $_SESSION['login'] = true;
-     
+
                     header('Location: /admin');
                 }else {
                     $errores[] = 'El password es incorrecto';

@@ -10,7 +10,7 @@
     if(!$id) {
         header('Location: /');
     }
-    
+
     //Conexion bd
     $db = conectarDB();
 
@@ -23,7 +23,7 @@
     if(!$resultado->num_rows) {
         header('Location: /');
     } 
-    
+
     // Consultar la BD 
     $articulo = mysqli_fetch_assoc($resultado);
 
