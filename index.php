@@ -1,12 +1,13 @@
 <?php 
-    //Incluir app
-    require 'includes/app.php';
+    //Incluir 
+    require 'includes/config/database.php';
+    require 'includes/funciones.php';
 
     //Conexion bd
     $db = conectarDB();
 
     // Escribir el Query
-    $query = "SELECT * FROM articulo";
+    $query = "SELECT * FROM articulos";
 
     // Consultar la BD 
     $articulos = mysqli_query($db, $query);

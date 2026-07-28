@@ -1,8 +1,6 @@
 <?php 
-
-    //Incluir app
-    require 'includes/app.php';
-
+    //Incluir 
+    require '../includes/funciones.php';
     $auth = estaAutenticado();
 
     if(!$auth) {
@@ -10,10 +8,11 @@
     }
 
     //Conexion bd
+    require '../includes/config/database.php';
     $db = conectarDB();
 
     // Escribir el Query
-    $query = "SELECT * FROM articulo";
+    $query = "SELECT * FROM articulos";
 
     // Consultar la BD 
     $articulos = mysqli_query($db, $query);
@@ -27,12 +26,12 @@
 
         if($id) {
             // Eliminar la propiedad
-            $query = "DELETE FROM articulo WHERE id = {$id}";
+            $query = "DELETE FROM articulos WHERE id = {$id}";
 
             $resultado = mysqli_query($db, $query);
 
             if($resultado) {
-                header('location: /admin.php?resultado=3');
+                header('location: /admin?resultado=3');
             }
         }
     }
@@ -46,7 +45,7 @@
     <div class="titulo">
         <h1>Personal blog</h1>
         <div class="sesion">
-            <a href="new.php"><span>+</span>Add</a>
+            <a href="admin/articulos/new.php"><span>+</span>Add</a>
             <a href="logout.php">Logout</a>
         </div>
     </div>
@@ -65,7 +64,7 @@
                 <p><?php echo $articulo['titulo']; ?></p>
 
                 <div class="botones">
-                    <a href="update.php?id=<?php echo $articulo['id']; ?>" class="c-gray">Edit</a>
+                    <a href="admin/articulos/update.php?id=<?php echo $articulo['id']; ?>" class="c-gray">Edit</a>
                     <form method="POST">
                         <input type="hidden" name="id" value="<?php echo $articulo['id']; ?>">
                         <input type="submit" class="delete" value="Delete">
@@ -77,6 +76,9 @@
 </main>
 
 <?php 
+    // Cerrar la conexion
+    mysqli_close($db);
+    
     //Incluir footer
     incluirTemplate('footer');
 ?>

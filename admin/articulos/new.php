@@ -1,13 +1,13 @@
 <?php 
-   //Incluir app
-    require 'includes/app.php';
-
+    //Incluir 
+    require '../../includes/funciones.php';
     $auth = estaAutenticado();
 
     if(!$auth) {
         header('Location: /');
     }
 
+    require '../../includes/config/database.php';
     $db = conectarDB();
 
     //Arreglo errores
@@ -34,13 +34,13 @@
 
         if(empty($errores)) {
               // Insertar en la base de datos
-            $query = " INSERT INTO articulo (titulo, fecha, contenido ) VALUES ( '$titulo', '$fecha', '$contenido' ) ";
+            $query = " INSERT INTO articulos (titulo, fecha, contenido ) VALUES ( '$titulo', '$fecha', '$contenido' ) ";
                 
             $resultado = mysqli_query($db, $query);
 
             if($resultado) {
                 // Redireccionar al usuario.
-                header('Location: /admin.php?resultado=1');
+                header('Location: /admin?resultado=1');
             }
         }
     }
@@ -52,7 +52,7 @@
 <main class="container">
     <div class="titulo">
         <h1>New Article</h1>
-        <a href="admin.php">Back</a>
+        <a href="/admin">Back</a>
     </div>
 
     <?php foreach($errores as $error): ?>

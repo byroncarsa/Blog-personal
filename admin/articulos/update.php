@@ -1,8 +1,6 @@
 <?php
-
-    //Incluir app
-    require 'includes/app.php';
-
+    //Incluir 
+    require '../../includes/funciones.php';
     $auth = estaAutenticado();
 
     if(!$auth) {
@@ -17,10 +15,11 @@
         header('Location: /admin');
     }
 
+    require '../../includes/config/database.php';
     $db = conectarDB();
 
     // Obtener los datos de la propiedad
-    $consulta = "SELECT * FROM articulo WHERE id = {$id}";
+    $consulta = "SELECT * FROM articulos WHERE id = {$id}";
     $resultado = mysqli_query($db, $consulta);
     $articulo = mysqli_fetch_assoc($resultado);
 
@@ -49,13 +48,13 @@
 
         if(empty($errores)) {
             // Insertar en la base de datos
-            $query = " UPDATE articulo SET titulo = '{$titulo}', fecha = '{$fecha}', contenido = '{$contenido}' WHERE id = {$id} ";
+            $query = " UPDATE articulos SET titulo = '{$titulo}', fecha = '{$fecha}', contenido = '{$contenido}' WHERE id = {$id} ";
 
             $resultado = mysqli_query($db, $query);
 
             if($resultado) {
                 // Redireccionar al usuario.
-                header('Location: /admin.php?resultado=2');
+                header('Location: /admin?resultado=2');
             }
         }
     }
@@ -67,7 +66,7 @@
 <main class="container">
     <div class="titulo">
         <h1>Update Article</h1>
-        <a href="admin.php">Back</a>
+        <a href="/admin">Back</a>
     </div>
 
     <?php foreach($errores as $error): ?>

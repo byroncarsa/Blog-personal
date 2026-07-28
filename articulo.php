@@ -1,6 +1,7 @@
 <?php
-    //Incluir app
-    require 'includes/app.php';
+    //Incluir 
+    require 'includes/config/database.php';
+    require 'includes/funciones.php';
 
     //Obtener id de index
     $id = $_GET['id'];
@@ -15,7 +16,7 @@
     $db = conectarDB();
 
     // Escribir el Query
-    $query = "SELECT * FROM articulo WHERE id = {$id}";
+    $query = "SELECT * FROM articulos WHERE id = {$id}";
 
     // Consultar la BD 
     $resultado = mysqli_query($db, $query);

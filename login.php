@@ -1,7 +1,7 @@
 <?php 
-
-    //Incluir app
-    require 'includes/app.php';
+    //Incluir 
+    require 'includes/config/database.php';
+    require 'includes/funciones.php';
 
     $db = conectarDB();
 
@@ -26,7 +26,7 @@
         if(empty($errores)){
 
             // Revisar si el usuario existe.
-            $query = "SELECT * FROM usuario WHERE nombre = '{$nombre}' ";
+            $query = "SELECT * FROM usuarios WHERE nombre = '{$nombre}' ";
             $resultado = mysqli_query($db, $query);
 
             if( $resultado->num_rows ) {
@@ -44,7 +44,7 @@
                     $_SESSION['usuario'] = $usuario['nombre'];
                     $_SESSION['login'] = true;
      
-                    header('Location: /admin.php');
+                    header('Location: /admin');
                 }else {
                     $errores[] = 'El password es incorrecto';
                 }

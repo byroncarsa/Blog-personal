@@ -1,6 +1,5 @@
 <?php
-//Constantes
-define('TEMPLATES_URL', __DIR__ . '/../templates');
+require 'app.php';
 
 //Debuguear
 function debuguear($variable){
@@ -8,12 +7,6 @@ function debuguear($variable){
     var_dump($variable);
     echo "</pre>";
     exit();
-}
-
-// Escapa / Sanitizar el HTML
-function s($html) : string {
-    $s = htmlspecialchars($html);
-    return $s;
 }
 
 //Transformar formato fecha
@@ -33,7 +26,8 @@ function incluirTemplate( string  $nombre) {
 function estaAutenticado() : bool {
     session_start();
 
-    $auth = $_SESSION['login'];
+    $auth = $_SESSION['login'] ?? false;
+
     if($auth) {
         return true;
     }
