@@ -11,7 +11,7 @@ function conectarDB() : mysqli{
     return $db;
 }
 
-function conectarDB2() : mysqli {
+function conectarDB1() : mysqli {
     $db = new mysqli('localhost', 'root', '', 'blog');
 
     if(!$db) {

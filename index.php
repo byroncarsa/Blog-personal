@@ -4,6 +4,7 @@
 
     //Conexion bd
     $db = conectarDB();
+    $db = conectarDB1();
 
     // Escribir el Query
     $query = "SELECT * FROM articulos";
