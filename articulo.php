@@ -13,7 +13,6 @@
 
     $articulo1 = Articulo::find($id);
 
-
     //Incluir header
     incluirTemplate('header');
 ?>
