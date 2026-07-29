@@ -7,6 +7,8 @@
         header('Location: /');
     }
 
+    use App\Articulo;
+
     $articulos = Articulo::all();
     
     // Muestra mensaje condicional

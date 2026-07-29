@@ -2,6 +2,8 @@
     //Incluir 
     require 'includes/app.php';
 
+    use App\Articulo;
+
     //Implementar metodo para obtener articulos
     $articulos = Articulo::all();
 

@@ -1,23 +1,11 @@
 <?php
 require 'funciones.php';
 require 'config/database.php';
-require 'classes/Articulo.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 //Conectarnos a la base de datos
-$db = conectarDB1();
+$db = conectarDB();
+
+use App\Articulo;
 
 Articulo::setDB($db);
-
-
-// $db = conectarDB();
-
-// // Escribir el Query
-// $query = "SELECT * FROM articulos";
-
-// // Consultar la BD 
-// $articulos = mysqli_query($db, $query);
-
-// foreach($articulos as $tmp){
-//     debuguear($tmp);
-// }
-

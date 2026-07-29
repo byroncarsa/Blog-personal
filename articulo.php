@@ -2,6 +2,8 @@
     //Incluir 
     require 'includes/app.php';
 
+    use App\Articulo;
+
     //Obtener id de index
     $id = $_GET['id'];
     $id = filter_var($id);
