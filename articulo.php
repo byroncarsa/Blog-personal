@@ -11,36 +11,22 @@
         header('Location: /');
     }
 
-    //Conexion bd
-    $db = conectarDB();
+    $articulo1 = Articulo::find($id);
 
-    // Escribir el Query
-    $query = "SELECT * FROM articulos WHERE id = {$id}";
-
-    // Consultar la BD 
-    $resultado = mysqli_query($db, $query);
-
-    if(!$resultado->num_rows) {
-        header('Location: /');
-    } 
-
-    // Consultar la BD 
-    $articulo = mysqli_fetch_assoc($resultado);
 
     //Incluir header
     incluirTemplate('header');
 ?>
 
 <main class="container">
-
     <div class="titulo">
-        <h1><?php echo $articulo['titulo']; ?></h1>
+        <h1><?php echo $articulo1->titulo; ?></h1>
         <a href="index.php">Back</a>
     </div>
     
-    <p class="fecha c-gray"><?php echo fecha($articulo['fecha']); ?></p>
+    <p class="fecha c-gray"><?php echo fecha($articulo1->fecha); ?></p>
 
-    <p class="contenido"><?php echo $articulo['contenido']; ?></p>
+    <p class="contenido"><?php echo $articulo1->contenido; ?></p>
 </main>
 
 <?php 
