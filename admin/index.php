@@ -1,38 +1,31 @@
 <?php 
     //Incluir 
-    require '../includes/funciones.php';
+    require '../includes/app.php';
     $auth = estaAutenticado();
 
     if(!$auth) {
         header('Location: /');
     }
 
-    //Conexion bd
-    $db = conectarDB();
-
-    // Escribir el Query
-    $query = "SELECT * FROM articulos";
-
-    // Consultar la BD 
-    $articulos = mysqli_query($db, $query);
+    $articulos = Articulo::all();
     
     // Muestra mensaje condicional
     $resultado = $_GET['resultado'] ?? null;
 
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $id = $_POST['id'];
-        $id = filter_var($id, FILTER_VALIDATE_INT);
+        // $id = $_POST['id'];
+        // $id = filter_var($id, FILTER_VALIDATE_INT);
 
-        if($id) {
-            // Eliminar la propiedad
-            $query = "DELETE FROM articulos WHERE id = {$id}";
+        // if($id) {
+        //     // Eliminar la propiedad
+        //     $query = "DELETE FROM articulos WHERE id = {$id}";
 
-            $resultado = mysqli_query($db, $query);
+        //     $resultado = mysqli_query($db, $query);
 
-            if($resultado) {
-                header('location: /admin?resultado=3');
-            }
-        }
+        //     if($resultado) {
+        //         header('location: /admin?resultado=3');
+        //     }
+        // }
     }
 
     //Incluir header
@@ -59,13 +52,13 @@
 
     <div class="articulos">
         <?php foreach($articulos as $articulo): ?>
-            <div class="articulo" id="<?php $articulo['id'] ?>">
-                <p><?php echo $articulo['titulo']; ?></p>
+            <div class="articulo" id="<?php echo $articulo->id; ?>">
+                <p><?php echo $articulo->titulo; ?></p>
 
                 <div class="botones">
-                    <a href="admin/articulos/update.php?id=<?php echo $articulo['id']; ?>" class="c-gray">Edit</a>
+                    <a href="admin/articulos/update.php?id=<?php echo $articulo->id; ?>" class="c-gray">Edit</a>
                     <form method="POST">
-                        <input type="hidden" name="id" value="<?php echo $articulo['id']; ?>">
+                        <input type="hidden" name="id" value="<?php echo $articulo->id; ?>">
                         <input type="submit" class="delete" value="Delete">
                     </form>
                 </div>
@@ -75,9 +68,6 @@
 </main>
 
 <?php 
-    // Cerrar la conexion
-    mysqli_close($db);
-    
     //Incluir footer
     incluirTemplate('footer');
 ?>

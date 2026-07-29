@@ -78,9 +78,6 @@
 
         <input type="submit" value="Enter" class="boton">
     </form>
-
-
-
 </main>
 
 <?php 

@@ -1,0 +1,17 @@
+{
+    "name": "byron.carsalade/blogpersonal",
+    "description": "php",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "App\\" : "./classes"
+        }
+    },
+    "authors": [
+        {
+            "name": "byroncarsa",
+            "email": "byron.carsalade@gmail.com"
+        }
+    ],
+    "require": {}
+}
