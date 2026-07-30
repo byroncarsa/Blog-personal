@@ -9,20 +9,23 @@ class ActiveRecord{
     protected static $tabla = '';
     protected static $columnasDB = [];
 
-    // Errores
-    protected static $errores = [];
+    
 
     // Definir la conexión a la BD
     public static function setDB($database) {
         self::$db = $database;
     }
 
+    // Errores
+    protected static $errores = [];
+
     // Validación
     public static function getErrores() {
         return static::$errores;
     }
 
-      public static function all() {
+
+    public static function all() {
         $query = "SELECT * FROM " . static::$tabla;
 
         $resultado = self::consultarSQL($query);
@@ -30,6 +33,7 @@ class ActiveRecord{
         return $resultado;
     }
 
+    
     public static function consultarSQL($query) {
         // Consultar la base de datos
         $resultado = self::$db->query($query);
@@ -59,7 +63,7 @@ class ActiveRecord{
         return $objeto;
     }
 
-     // Busca un registro por su id
+    // Busca un registro por su id
     public static function find($id) {
         $query = "SELECT * FROM " . static::$tabla  ." WHERE id = {$id}";
 
@@ -68,7 +72,7 @@ class ActiveRecord{
         return array_shift( $resultado ) ;
     }
 
-      // Registros - CRUD
+    // Registros - CRUD
     public function guardar() {
         if(!is_null($this->id)) {
             // actualizar
@@ -79,7 +83,7 @@ class ActiveRecord{
         }
     }
 
-     // crea un nuevo registro
+    // crea un nuevo registro
     public function crear() {
         // Sanitizar los datos
         $atributos = $this->sanitizarAtributos();
@@ -146,9 +150,9 @@ class ActiveRecord{
 
     public function sincronizar($args=[]) { 
         foreach($args as $key => $value) {
-          if(property_exists($this, $key) && !is_null($value)) {
+            if(property_exists($this, $key) && !is_null($value)) {
             $this->$key = $value;
-          }
+            }
         }
     }
 

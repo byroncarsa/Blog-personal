@@ -24,7 +24,7 @@
         <h1><?php echo $articulo1->titulo; ?></h1>
         <a href="index.php">Back</a>
     </div>
-    
+
     <p class="fecha c-gray"><?php echo fecha($articulo1->fecha); ?></p>
 
     <p class="contenido"><?php echo $articulo1->contenido; ?></p>
