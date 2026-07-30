@@ -23,7 +23,6 @@ function incluirTemplate( string  $nombre) {
     include TEMPLATES_URL . "/{$nombre}.php"; 
 }
 
-// //Esta autenticado
 // function estaAutenticado() : bool {
 //     session_start();
 
@@ -38,7 +37,9 @@ function incluirTemplate( string  $nombre) {
 function estaAutenticado() {
     session_start();
 
-    if(!$_SESSION['login']) {
+    $auth = $_SESSION['login'] ?? false;
+
+    if(!$auth) {
         header('Location: /');
     }
 }

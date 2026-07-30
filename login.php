@@ -1,54 +1,39 @@
 <?php 
     //Incluir 
     require 'includes/app.php';
+    use App\Admin;
 
-    $db = conectarDB();
-
-    //Arreglo errores
-    $errores = [];
+    $errores = Admin::getErrores();
 
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
-        //Completar variables 
-        $nombre = mysqli_real_escape_string($db,  $_POST['nombre'] );
-        $password = mysqli_real_escape_string($db,  $_POST['password']);
-
-        if(!$nombre){
-            $errores[] = 'Debes añadir un nombre de usuario';
-        }
-
-        if(!$password){
-            $errores[] = 'Debes añadir una contraseña';
-        }
+        $admin = new Admin($_POST['admin']);
+        $errores = $admin->validar();
 
         //Verificar que no haya errores
         if(empty($errores)){
 
-            // Revisar si el usuario existe.
-            $query = "SELECT * FROM usuarios WHERE nombre = '{$nombre}' ";
-            $resultado = mysqli_query($db, $query);
+            //Revisar si el usuario existe
+            $resultado = $admin->existeUsuario(); 
 
-            if( $resultado->num_rows ) {
-                    // Revisar si el password es correcto
-                $usuario = mysqli_fetch_assoc($resultado);
+
+            //asignar el resultado del arrelgo de resultado
+            [$existe, $resultado] = $resultado;
+
+            if( $existe ) {
+                // Usuario existe, verificar su password
+                $resultado = $admin->verificarPassword($resultado);
+                
+                $auth = $resultado;
 
                 // Verificar si el password es correcto o no
-                $auth = password_verify($password, $usuario['password']);
-
                 if($auth) {
-                    // El usuario esta autenticado
-                    session_start();
-
-                    // Llenar el arreglo de la sesión
-                    $_SESSION['usuario'] = $usuario['nombre'];
-                    $_SESSION['login'] = true;
-
-                    header('Location: /admin');
-                }else {
-                    $errores[] = 'El password es incorrecto';
+                    return header('Location: /admin');
+                } else {
+                    $errores = $resultado[1];
                 }
-            }else {
-                $errores[] = "El Usuario no existe";
+            } else {
+                $errores = $resultado;
             }
         }
     }
@@ -63,17 +48,16 @@
         <a href="index.php">Back</a>
     </div>
 
-    <form class="formulario" method="post">
+    <?php foreach($errores as $error): ?>
+        <div class="alerta error">
+            <?php echo $error; ?>
+        </div>
+    <?php endforeach ?>
 
-        <?php foreach($errores as $error): ?>
-            <div class="alerta error">
-                <?php echo $error; ?>
-            </div>
-        <?php endforeach ?>
-
+    <form class="formulario" method="post" novalidate>
         <div class="entradas">
-            <input type="text" placeholder="User Name" name="nombre">
-            <input type="password" placeholder="Password" name="password">
+            <input type="text" placeholder="User Name" name="admin[nombre]">
+            <input type="password" placeholder="Password" name="admin[password]">
         </div>
 
         <input type="submit" value="Enter" class="boton">
