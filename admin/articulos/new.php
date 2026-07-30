@@ -1,46 +1,24 @@
 <?php 
     //Incluir 
     require '../../includes/app.php';
-    $auth = estaAutenticado();
+    estaAutenticado();
 
-    if(!$auth) {
-        header('Location: /');
-    }
-
-    $db = conectarDB();
+    use App\Articulo;
+    $articulo = new Articulo;
 
     //Arreglo errores
-    $errores = [];
-
-    //Inicializar variables
-    $titulo = '';
-    $contenido = '';
+    $errores = Articulo::getErrores();
 
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
-        //Completar variables 
-        $titulo = $_POST['titulo'];
-        $fecha = date('Y-m-d');
-        $contenido = $_POST['contenido'];
+        //Crear nueva instancia
+        $articulo = new Articulo($_POST);
 
-        if(!$titulo){
-            $errores[] = 'Debes añadir un titulo';
-        }
-
-        if(!$contenido){
-            $errores[] = 'Debes añadir un mensaje';
-        }
+        //Validar
+        $errores = $articulo->validar();
 
         if(empty($errores)) {
-              // Insertar en la base de datos
-            $query = " INSERT INTO articulos (titulo, fecha, contenido ) VALUES ( '$titulo', '$fecha', '$contenido' ) ";
-                
-            $resultado = mysqli_query($db, $query);
-
-            if($resultado) {
-                // Redireccionar al usuario.
-                header('Location: /admin?resultado=1');
-            }
+            $articulo->guardar();
         }
     }
 
@@ -63,9 +41,9 @@
     <form class="formulario" method="post">
 
         <div class="entradas">
-            <input type="text" placeholder="Article Title" name="titulo" value="<?php echo $titulo; ?>">
+            <input type="text" placeholder="Article Title" name="titulo" value="<?php echo s($articulo->titulo); ?>">
             <input type="text" placeholder="Publishing Date" disabled>
-            <textarea name="contenido" placeholder="Content"><?php echo $contenido; ?></textarea>
+            <textarea name="contenido" placeholder="Content"><?php echo s($articulo->contenido); ?></textarea>
         </div>
 
         <input type="submit" value="Publish" class="boton">

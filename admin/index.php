@@ -1,33 +1,22 @@
 <?php 
     //Incluir 
     require '../includes/app.php';
-    $auth = estaAutenticado();
-
-    if(!$auth) {
-        header('Location: /');
-    }
+    estaAutenticado();
 
     use App\Articulo;
-
     $articulos = Articulo::all();
     
     // Muestra mensaje condicional
     $resultado = $_GET['resultado'] ?? null;
 
     if($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // $id = $_POST['id'];
-        // $id = filter_var($id, FILTER_VALIDATE_INT);
+        $id = $_POST['id'];
+        $id = filter_var($id, FILTER_VALIDATE_INT);
 
-        // if($id) {
-        //     // Eliminar la propiedad
-        //     $query = "DELETE FROM articulos WHERE id = {$id}";
-
-        //     $resultado = mysqli_query($db, $query);
-
-        //     if($resultado) {
-        //         header('location: /admin?resultado=3');
-        //     }
-        // }
+        if($id) {
+            $propiedad = Articulo::find($id);
+            $propiedad->eliminar();
+        }
     }
 
     //Incluir header

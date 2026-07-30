@@ -1,11 +1,7 @@
 <?php
     //Incluir 
     require '../../includes/app.php';
-    $auth = estaAutenticado();
-
-    if(!$auth) {
-        header('Location: /');
-    }
+    estaAutenticado();
 
     //Recibir id
     $id = $_GET['id'];
@@ -15,46 +11,21 @@
         header('Location: /admin');
     }
 
-    $db = conectarDB();
+    use App\Articulo;
+    $articulo = Articulo::find($id);
 
-    // Obtener los datos de la propiedad
-    $consulta = "SELECT * FROM articulos WHERE id = {$id}";
-    $resultado = mysqli_query($db, $consulta);
-    $articulo = mysqli_fetch_assoc($resultado);
-
-    //Errores
-    $errores = [];
-
-    //Crear variables
-    $titulo = $articulo['titulo'];
-    $contenido = $articulo['contenido'];
-
+    $errores = Articulo::getErrores();
 
     if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
-        $titulo = mysqli_real_escape_string( $db,  $_POST['titulo'] );
-        $fecha = date('Y-m-d');
-        $contenido = mysqli_real_escape_string( $db,  $_POST['contenido'] );
+        $args = $_POST;
 
-        if(!$titulo){
-            $errores[] = 'Debe agregar un titulo';
-        }
+        $articulo->sincronizar($args);
 
-        if(!$contenido){
-            $errores[] = 'Debe agregar un contenido';
-        }
-
+        $errores = $articulo->validar();
 
         if(empty($errores)) {
-            // Insertar en la base de datos
-            $query = " UPDATE articulos SET titulo = '{$titulo}', fecha = '{$fecha}', contenido = '{$contenido}' WHERE id = {$id} ";
-
-            $resultado = mysqli_query($db, $query);
-
-            if($resultado) {
-                // Redireccionar al usuario.
-                header('Location: /admin?resultado=2');
-            }
+            $articulo->guardar();
         }
     }
 
@@ -76,9 +47,9 @@
 
     <form class="formulario" method="post">
         <div class="entradas">
-            <input type="text" placeholder="Article Title" name="titulo" value="<?php echo $titulo; ?>">
-            <input type="text" placeholder="Publishing Date" name="date" value="<?php echo $articulo['fecha']; ?>" disabled>
-            <textarea name="contenido" placeholder="Content"><?php echo $contenido; ?></textarea>
+            <input type="text" placeholder="Article Title" name="titulo" value="<?php echo s($articulo->titulo); ?>">
+            <input type="text" placeholder="Publishing Date" name="date" value="<?php echo s($articulo->fecha); ?>" disabled>
+            <textarea name="contenido" placeholder="Content"><?php echo s($articulo->contenido); ?></textarea>
         </div>
 
         <input type="submit" value="Update" class="boton">

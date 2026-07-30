@@ -7,6 +7,10 @@ class Articulo{
     //Base de datos
     protected static $db;
     protected static $tabla = 'articulos';
+    protected static $columnasDB = ['id', 'titulo', 'fecha', 'contenido'];
+
+    // Errores
+    protected static $errores = [];
 
     public $id;
     public $titulo;
@@ -20,6 +24,11 @@ class Articulo{
         $this->fecha = date('Y/m/d');
         $this->contenido = $args['contenido'] ?? '';
     } 
+
+    // Validación
+    public static function getErrores() {
+        return static::$errores;
+    }
 
     public static function setDB($database){
         self::$db = $database;
@@ -70,5 +79,120 @@ class Articulo{
 
         return array_shift( $resultado ) ;
     }
+
+
+    public function validar() {
+
+        if(!$this->titulo) {
+            self::$errores[] = "Debes añadir un titulo";
+        }
+
+        if(!$this->contenido) {
+            self::$errores[] = 'El contenido es Obligatorio';
+        }
+
+        if( strlen( $this->contenido ) < 5 ) {
+            self::$errores[] = 'El contenido es obligatoria y debe tener al menos 5 caracteres';
+        }
+
+        return self::$errores;
+    }
+
+
+      // Registros - CRUD
+    public function guardar() {
+        if(!is_null($this->id)) {
+            // actualizar
+            $this->actualizar();
+        } else {
+            // Creando un nuevo registro
+            $this->crear();
+        }
+    }
+
+     // crea un nuevo registro
+    public function crear() {
+        // Sanitizar los datos
+        $atributos = $this->sanitizarAtributos();
+
+        // Insertar en la base de datos
+        $query = " INSERT INTO " . static::$tabla . " ( ";
+        $query .= join(', ', array_keys($atributos));
+        $query .= " ) VALUES (' "; 
+        $query .= join("', '", array_values($atributos));
+        $query .= " ') ";
+
+        // Resultado de la consulta
+        $resultado = self::$db->query($query);
+
+        // Mensaje de exito
+        if($resultado) {
+            // Redireccionar al usuario.
+            header('Location: /admin?resultado=1');
+        }
+    }
+
+
+    public function actualizar() {
+
+        // Sanitizar los datos
+        $atributos = $this->sanitizarAtributos();
+
+        $valores = [];
+        foreach($atributos as $key => $value) {
+            $valores[] = "{$key}='{$value}'";
+        }
+
+        $query = "UPDATE " . static::$tabla ." SET ";
+        $query .=  join(', ', $valores );
+        $query .= " WHERE id = '" . self::$db->escape_string($this->id) . "' ";
+        $query .= " LIMIT 1 "; 
+
+        $resultado = self::$db->query($query);
+
+        if($resultado) {
+            // Redireccionar al usuario.
+            header('Location: /admin?resultado=2');
+        }
+    }
+
+     // Identificar y unir los atributos de la BD
+    public function atributos() {
+        $atributos = [];
+        foreach(static::$columnasDB as $columna) {
+            if($columna === 'id') continue;
+            $atributos[$columna] = $this->$columna;
+        }
+        return $atributos;
+    }
+
+    public function sanitizarAtributos() {
+        $atributos = $this->atributos();
+        $sanitizado = [];
+        foreach($atributos as $key => $value ) {
+            $sanitizado[$key] = self::$db->escape_string($value);
+        }
+        return $sanitizado;
+    }
+
+    public function sincronizar($args=[]) { 
+        foreach($args as $key => $value) {
+          if(property_exists($this, $key) && !is_null($value)) {
+            $this->$key = $value;
+          }
+        }
+    }
+
+    // Eliminar un registro
+    public function eliminar() {
+        // Eliminar el registro
+        $query = "DELETE FROM "  . static::$tabla . " WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1";
+        $resultado = self::$db->query($query);
+
+        if($resultado) {
+            header('location: /admin?resultado=3');
+        }
+    }
+
 
 }

@@ -23,14 +23,28 @@ function incluirTemplate( string  $nombre) {
     include TEMPLATES_URL . "/{$nombre}.php"; 
 }
 
-//Esta autenticado
-function estaAutenticado() : bool {
+// //Esta autenticado
+// function estaAutenticado() : bool {
+//     session_start();
+
+//     $auth = $_SESSION['login'] ?? false;
+
+//     if($auth) {
+//         return true;
+//     }
+//     return false;
+// }
+
+function estaAutenticado() {
     session_start();
 
-    $auth = $_SESSION['login'] ?? false;
-
-    if($auth) {
-        return true;
+    if(!$_SESSION['login']) {
+        header('Location: /');
     }
-    return false;
+}
+
+// Escapa / Sanitizar el HTML
+function s($html) : string {
+    $s = htmlspecialchars($html);
+    return $s;
 }
