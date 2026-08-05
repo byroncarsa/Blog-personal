@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace Model;
 
 class ActiveRecord{
 
@@ -72,15 +72,17 @@ class ActiveRecord{
         return array_shift( $resultado ) ;
     }
 
-    // Registros - CRUD
+      // Registros - CRUD
     public function guardar() {
+        $resultado = '';
         if(!is_null($this->id)) {
             // actualizar
-            $this->actualizar();
+            $resultado = $this->actualizar();
         } else {
             // Creando un nuevo registro
-            $this->crear();
+            $resultado = $this->crear();
         }
+        return $resultado;
     }
 
     // crea un nuevo registro
@@ -98,11 +100,7 @@ class ActiveRecord{
         // Resultado de la consulta
         $resultado = self::$db->query($query);
 
-        // Mensaje de exito
-        if($resultado) {
-            // Redireccionar al usuario.
-            header('Location: /admin?resultado=1');
-        }
+        return $resultado;
     }
 
 
@@ -123,10 +121,7 @@ class ActiveRecord{
 
         $resultado = self::$db->query($query);
 
-        if($resultado) {
-            // Redireccionar al usuario.
-            header('Location: /admin?resultado=2');
-        }
+        return $resultado;
     }
 
      // Identificar y unir los atributos de la BD
@@ -156,15 +151,23 @@ class ActiveRecord{
         }
     }
 
+
     // Eliminar un registro
     public function eliminar() {
         // Eliminar el registro
         $query = "DELETE FROM "  . static::$tabla . " WHERE id = " . self::$db->escape_string($this->id) . " LIMIT 1";
         $resultado = self::$db->query($query);
 
-        if($resultado) {
-            header('location: /admin?resultado=3');
-        }
+        return $resultado;
+    }
+
+
+    public static function get($limite) {
+        $query = "SELECT * FROM " . static::$tabla . " LIMIT {$limite}";
+
+        $resultado = self::consultarSQL($query);
+
+        return $resultado;
     }
 
 

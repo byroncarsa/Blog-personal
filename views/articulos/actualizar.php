@@ -1,42 +1,7 @@
-<?php
-    //Incluir 
-    require '../../includes/app.php';
-    estaAutenticado();
-
-    //Recibir id
-    $id = $_GET['id'];
-    $id = filter_var($id);
-
-    if(!$id) {
-        header('Location: /admin');
-    }
-
-    use App\Articulo;
-    $articulo = Articulo::find($id);
-
-    $errores = Articulo::getErrores();
-
-    if($_SERVER['REQUEST_METHOD'] === 'POST'){
-
-        $args = $_POST;
-
-        $articulo->sincronizar($args);
-
-        $errores = $articulo->validar();
-
-        if(empty($errores)) {
-            $articulo->guardar();
-        }
-    }
-
-    //Incluir header
-    incluirTemplate('header');
-?>
-
 <main class="container">
     <div class="titulo">
         <h1>Update Article</h1>
-        <a href="/admin">Back</a>
+        <a href="/articulos">Back</a>
     </div>
 
     <?php foreach($errores as $error): ?>
@@ -56,8 +21,3 @@
     </form>
 
 </main>
-
-<?php 
-    //Incluir footer
-    incluirTemplate('footer');
-?>

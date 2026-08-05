@@ -1,35 +1,7 @@
-<?php 
-    //Incluir 
-    require '../../includes/app.php';
-    estaAutenticado();
-
-    use App\Articulo;
-    $articulo = new Articulo;
-
-    //Arreglo errores
-    $errores = Articulo::getErrores();
-
-    if($_SERVER['REQUEST_METHOD'] === 'POST'){
-
-        //Crear nueva instancia
-        $articulo = new Articulo($_POST);
-
-        //Validar
-        $errores = $articulo->validar();
-
-        if(empty($errores)) {
-            $articulo->guardar();
-        }
-    }
-
-    //Incluir header
-    incluirTemplate('header');
-?>
-
 <main class="container">
     <div class="titulo">
         <h1>New Article</h1>
-        <a href="/admin">Back</a>
+        <a href="/articulos">Back</a>
     </div>
 
     <?php foreach($errores as $error): ?>
@@ -49,8 +21,3 @@
         <input type="submit" value="Publish" class="boton">
     </form>
 </main>
-
-<?php 
-    //Incluir footer
-    incluirTemplate('footer');
-?>
